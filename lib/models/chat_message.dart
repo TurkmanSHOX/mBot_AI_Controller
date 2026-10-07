@@ -1,0 +1,19 @@
+import 'robot_command.dart';
+
+class ChatMessage {
+  final String id;
+  final String text;
+  final bool isUser;
+  final DateTime timestamp;
+  final RobotCommand? executedCommand;
+  final bool isVoice;
+
+  ChatMessage({
+    required this.id,
+    required this.text,
+    required this.isUser,
+    required this.timestamp,
+    this.executedCommand,
+    this.isVoice = false,
+  });
+}
