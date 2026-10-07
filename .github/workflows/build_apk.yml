@@ -1,0 +1,44 @@
+name: Build mBot AI APK
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Android APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java JDK 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Recreate Android Gradle wrapper if needed
+        run: |
+          cp android/app/src/main/AndroidManifest.xml /tmp/AndroidManifest.xml
+          flutter create . --org com.makeblock --project-name mbot_ai_controller --platforms android
+          cp /tmp/AndroidManifest.xml android/app/src/main/AndroidManifest.xml
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build Release APK
+        run: flutter build apk --release
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mBot-AI-Brain-APK
+          path: build/app/outputs/flutter-apk/app-release.apk
