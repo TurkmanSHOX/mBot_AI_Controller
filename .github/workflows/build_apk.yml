@@ -28,6 +28,7 @@ jobs:
       - name: Recreate Android Gradle wrapper if needed
         run: |
           cp android/app/src/main/AndroidManifest.xml /tmp/AndroidManifest.xml
+          rm -rf android
           flutter create . --org com.makeblock --project-name mbot_ai_controller --platforms android
           cp /tmp/AndroidManifest.xml android/app/src/main/AndroidManifest.xml
 
